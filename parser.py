@@ -1,5 +1,7 @@
-#import dictionaries as dico
-#import fonctions as do
+
+import dictionaries as dico
+import fonctions as do
+import defines
 
 import time
 import csv
@@ -10,11 +12,11 @@ import csv
 start_time = time.time()
 
 #########################################
-with open('../output/pops.csv', 'w', newline='') as output:
+with open(defines.output, 'w', newline='') as output:
     pops = csv.writer(output)
     pops.writerow(["Date","province","provid","Country","Pop_size","pop_type","pop_cul","pop_rel","consciousness","militancy","literacy","life_needs","everyday_needs","luxury_needs","production_type","production_qty","production_value"
 ])
-    with open('../input/autosave.v2','r') as f:
+    with open(defines.input,'r') as f:
         lines = f.readlines()
         savegame=[]
 
@@ -22,6 +24,7 @@ with open('../output/pops.csv', 'w', newline='') as output:
             savegame.append(line)
 
         curdate=savegame[1].replace("\"","").replace("date=","").strip()
+
         cur_level=0
         cur_obj=""
         obj_list=[0]
@@ -78,4 +81,3 @@ with open('../output/pops.csv', 'w', newline='') as output:
                 #do.get_obj_param("pop","stats",str(savegame[x]).strip())+str(x))
             #on a affaire à un rgo
             #on a affaire à un goods
-print("--- %s seconds ---" % (time.time() - start_time))

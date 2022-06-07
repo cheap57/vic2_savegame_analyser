@@ -1,6 +1,6 @@
 import dictionaries
 def get_value(string,lookupstring):
-    return string.strip().replace(lookupstring,"").replace("\"","")
+    return str(string).strip().replace(lookupstring,"").replace("\"","")
 
 #######fonctions pour stats de pop, à unifier?#############
 def get_culture(string):
@@ -28,8 +28,8 @@ def get_obj_param(obj_type,obj_stats,teststring):
             #stat=[stats,teststring.replace(stats+"=","")]
             #stat=stats+": "+teststring.replace(stats+"=","")]
             #print (stat)
-            return teststring            
+            return teststring.replace("=","")
         case _:
-            stat="nope"
+            return ""
 
 #get_obj_param("pop","types",1,10)
