@@ -1,5 +1,5 @@
-import dictionaries as dico
-import fonctions as do
+#import dictionaries as dico
+#import fonctions as do
 
 import time
 import csv
@@ -16,42 +16,65 @@ with open('../output/pops.csv', 'w', newline='') as output:
 ])
     with open('../input/autosave.v2','r') as f:
         lines = f.readlines()
-        savegame=[0]
+        savegame=[]
 
         for line in lines:
             savegame.append(line)
 
         curdate=savegame[1].replace("\"","").replace("date=","").strip()
-
+        cur_level=0
+        cur_obj=""
+        obj_list=[0]
+        obj_index=1
         for x in range(len(savegame)):
-            isname = str(savegame[x]).find("name=")
-            isunit = str(savegame[x]).find(" ")
-            if isname!=-1 and isunit!=4:
+            prev_index=obj_index
 
-                province=do.get_value(savegame[x],"name=")
-                province_id=do.get_value(savegame[x-2],"=")
-                owner=do.get_value(savegame[x+1],"owner=")
-                controller=do.get_value(savegame[x+2],"controller=")
+            
+                
+            if str(savegame[x]).find("{")>=0: 
+                cur_level=+1
 
-                if len(province_id)<=4:
+                cur_obj=str(savegame[x-1]).strip()
+                obj_index+=1
+  
+                
 
-                    cur_prov=province.replace("\"","")
-                    cur_provid=province_id
-                    cur_owner=owner
-                    cur_controller=controller
-            #on a affaire à une pop: scrap les datas
-            if do.get_poptype(str(savegame[x]).strip())!="nope":
-                cur_pop=do.get_poptype(str(savegame[x]).strip())
-                cur_size=do.get_value(savegame[x+3],"size=")
-                cur_cul=do.get_culture(savegame[x+4].strip())
-                cur_rel=do.get_religion(savegame[x+4].strip())
+            if str(savegame[x]).strip().find("}")>=0:
+                cur_level-=1
+             
+            #if cur_level>=0 and prev_index!=obj_index:
+            print (str(x)+"("+str(cur_level)+"): "+cur_obj.replace("=","")+" ("+str(obj_index)+")")
 
-                is_mil =  str(savegame[x]).find("mil=")
+
+            
+##            isname = str(savegame[x]).find("name=")
+##            isunit = str(savegame[x]).find(" ")
+##            if isname!=-1 and isunit!=4:
+##
+##                province=do.get_value(savegame[x],"name=")
+##                province_id=do.get_value(savegame[x-2],"=")
+##                owner=do.get_value(savegame[x+1],"owner=")
+##                controller=do.get_value(savegame[x+2],"controller=")
+##
+##                if len(province_id)<=4:
+##
+##                    cur_prov=province.replace("\"","")
+##                    cur_provid=province_id
+##                    cur_owner=owner
+##                    cur_controller=controller
+##            #on a affaire à une pop: scrap les datas
+##            if do.get_poptype(str(savegame[x]).strip())!="nope":
+##                cur_pop=do.get_poptype(str(savegame[x]).strip())
+##                cur_size=do.get_value(savegame[x+3],"size=")
+##                cur_cul=do.get_culture(savegame[x+4].strip())
+##                cur_rel=do.get_religion(savegame[x+4].strip())
+##
+##                is_mil =  str(savegame[x]).find("mil=")
 
                 #pops.writerow([curdate,cur_prov,cur_provid,cur_owner,cur_size,cur_pop,cur_cul,cur_rel])
                 #print ([curdate,cur_prov,cur_provid,cur_owner,cur_size,cur_pop,cur_cul,cur_rel])
 
-            print (str(x))
+            
                 #do.get_obj_param("pop","stats",str(savegame[x]).strip())+str(x))
             #on a affaire à un rgo
             #on a affaire à un goods
