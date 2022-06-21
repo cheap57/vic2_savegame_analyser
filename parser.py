@@ -32,24 +32,24 @@ with open(defines.output, 'w', newline='') as output:
         for x in range(len(savegame)):
             prev_index=obj_index
 
-            
-                
-            if str(savegame[x]).find("{")>=0: 
+
+
+            if str(savegame[x]).strip().find("{")>=0:
                 cur_level=+1
 
                 cur_obj=str(savegame[x-1]).strip()
                 obj_index+=1
-  
-                
+
+
 
             if str(savegame[x]).strip().find("}")>=0:
                 cur_level-=1
-             
+
             #if cur_level>=0 and prev_index!=obj_index:
             print (str(x)+"("+str(cur_level)+"): "+cur_obj.replace("=","")+" ("+str(obj_index)+")")
 
 
-            
+
 ##            isname = str(savegame[x]).find("name=")
 ##            isunit = str(savegame[x]).find(" ")
 ##            if isname!=-1 and isunit!=4:
@@ -77,7 +77,8 @@ with open(defines.output, 'w', newline='') as output:
                 #pops.writerow([curdate,cur_prov,cur_provid,cur_owner,cur_size,cur_pop,cur_cul,cur_rel])
                 #print ([curdate,cur_prov,cur_provid,cur_owner,cur_size,cur_pop,cur_cul,cur_rel])
 
-            
+
                 #do.get_obj_param("pop","stats",str(savegame[x]).strip())+str(x))
             #on a affaire à un rgo
             #on a affaire à un goods
+print("--- %s seconds ---" % (time.time() - start_time))
