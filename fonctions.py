@@ -3,10 +3,10 @@ def get_value(string,lookupstring):
     return str(string).strip().replace(lookupstring,"").replace("\"","")
 
 #######fonctions pour stats de pop, à unifier?#############
-def get_culture(string):
+def get_left(string):
     middle=string.find("=")
     return string[:middle]
-def get_religion(string):
+def get_right(string):
     middle=string.find("=")+1
     return string[middle:]
 ##########fonction pour identifier une pop. eventuellement à remplacer################
@@ -17,6 +17,13 @@ def get_poptype(string):
         case _:
             poptype="nope"
     return poptype
+def is_excluded(string):
+    match dictionaries.exclusion_list.count(string):
+        case 1:
+            excluded=1
+        case _:
+            excluded=0
+    return excluded
 #######################################
 #fonction pour scanner l'intérieur d'un objet dans un niveau et en retourner toutes les valeurs de stats
     #exemple: le parser tombe sur une pop, la fonction vérifie les stats de pop et les cherche dans la string courante. si c'est une stat, la fonction renvoie une chaine [stat, valeur]

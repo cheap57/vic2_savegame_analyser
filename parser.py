@@ -13,9 +13,10 @@ start_time = time.time()
 
 #########################################
 with open(defines.output, 'w', newline='') as output:
-    pops = csv.writer(output)
+    pops = csv.writer(output,delimiter=';')
     pops.writerow(["Date","province","provid","Country","Pop_size","pop_type","pop_cul","pop_rel","consciousness","militancy","literacy","life_needs","everyday_needs","luxury_needs","production_type","production_qty","production_value"
 ])
+    
     with open(defines.input,'r') as f:
         lines = f.readlines()
         savegame=[]
@@ -27,28 +28,57 @@ with open(defines.output, 'w', newline='') as output:
 
         cur_level=0
         cur_obj=""
+        prev_obj=""
+
+        levels={
+        0:"",
+        1:"",
+        2:"",
+        3:"",
+        4:"",
+        5:"",
+        6:"",
+        7:""}
+        
         obj_list=[0]
         obj_index=1
+        
         for x in range(len(savegame)):
-            prev_index=obj_index
-
-
-
+            prev_obj=cur_obj
             if str(savegame[x]).strip().find("{")>=0:
-                cur_level=+1
-
-                cur_obj=str(savegame[x-1]).strip()
-                obj_index+=1
-
-
-
+                cur_level+=1
+                #cur_obj=str(savegame[x-1]).strip()
+                
             if str(savegame[x]).strip().find("}")>=0:
+                levels[cur_level]=""
                 cur_level-=1
+                
+                #prev_obj=cur_obj
+                
+            #maintenant que niveau est défini, on voit si c'est un objet
+            if str(savegame[x]).strip().find("=")>=0:
+                
+                levels[cur_level]=do.get_left(str(savegame[x]).strip())
+                
+                cur_obj=do.get_left(str(savegame[x]).strip())
+                
+                if do.is_excluded(cur_obj)==0:
+                    if levels[0].isnumeric()==True:
+                        pops.writerow([levels[0],levels[1],levels[2],levels[3],levels[4],levels[5],levels[6],levels[7],do.get_left(str(savegame[x]).strip()),do.get_right(str(savegame[x]).strip().replace(".",","))])
+                        
+            #if prev_obj==cur_obj:
+                #on est sur le même objet que ligne x-1 (en tous cas même niveau), faut chopper les attributs et
+                #leurs valeurs et mettre dans la même ligne du csv
+            #else:
+                #on est sur un nouvel objet, il faut donc ouvrir une nouvelle ligne de csv et identifier le type d'objet
+                
+            
 
             #if cur_level>=0 and prev_index!=obj_index:
-            print (str(x)+"("+str(cur_level)+"): "+cur_obj.replace("=","")+" ("+str(obj_index)+")")
+                #print (str(x+1)+"("+str(cur_level)+"): "+cur_obj.replace("=","")+" ("+str(obj_index)+")")
+            #print (str(x+1)+"("+str(cur_level)+"): "+str(savegame[x]).strip())
 
-
+#print (maxi)
 
 ##            isname = str(savegame[x]).find("name=")
 ##            isunit = str(savegame[x]).find(" ")
